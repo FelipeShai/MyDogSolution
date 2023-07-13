@@ -17,7 +17,7 @@ javac application/Program.java
 java application.Program
 * Siga as instruções na tela para inserir a entrada necessária, como a data, a quantidade de cães pequenos e a quantidade de cães grandes.
 * O sistema exibirá o nome do melhor petshop e o preço total dos banhos.
-Observação: Certifique-se de ter o JDK do Java instalado em sua máquina e configurado corretamente para executar o programa.
+<br><br>Observação: Certifique-se de ter o JDK do Java instalado em sua máquina e configurado corretamente para executar o programa.<br>
 
 Autor
 Felipe Shai
