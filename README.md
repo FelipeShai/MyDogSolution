@@ -1,6 +1,6 @@
 # Petshop Finder
 ## Premissas assumidas
-* O usuário fornecerá a entrada no formato correto: <data> <quantidade de cães pequenos> <quantidade de cães grandes>, por exemplo, 03/08/2018 3 5.
+* O usuário fornecerá a entrada no formato correto: data quantidade-de-cães-pequenos quantidade-de-cães-grandes>, por exemplo, 03/08/2018 3 5.
 * Os preços e distâncias mencionados no enunciado do problema são precisos e não são alterados.
 * O sistema considera apenas os preços e distâncias dos três petshops especificados: Meu Canino Feliz, Vai Rex e ChowChawgas. 
 ## Decisões de projeto
