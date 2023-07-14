@@ -8,7 +8,7 @@
 * The project structure was divided into separate classes for each pet shop and the main program logic.
 * The java.time library was used to manipulate dates and weekdays.
 * Input validation is minimal and assumes that the user will provide valid input in the specified format.
-## Instruções para executar o sistema
+## Instructions to run the system
 * Clone the repository to your local machine.
 * Open a command prompt or terminal and navigate to the project directory.
 * Compile the source files using the following command:
