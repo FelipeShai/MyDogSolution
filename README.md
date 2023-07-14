@@ -1,7 +1,7 @@
 # Petshop Finder
 ## Assumed premises
 * The user will provide input in the correct format: date number-of-small-dogs number-of-large-dogs, for example, 08/03/2018 3 5.
-*The prices and distances mentioned in the problem statement are accurate and not altered.
+* The prices and distances mentioned in the problem statement are accurate and not altered.
 * The system only considers the prices and distances of the three specified pet shops: Meu Canino Feliz, Vai Rex, and ChowChawgas.
 ## Design decisions
 * The system was implemented in Java language, using the object-oriented programming paradigm.
