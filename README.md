@@ -17,10 +17,10 @@ javac application/Program.java
 java application.Program
 * Follow the on-screen instructions to input the required information, such as the date, number of small dogs, and number of large dogs.
 * The system will display the name of the best pet shop and the total price of the baths.
-<br><br><br><br>Note: Make sure you have the [Java JDK](https://www.oracle.com/java/technologies/downloads/#jdk20-windows) installed on your machine and properly configured to run the program.<br>
-
-To the unit test`s I advise using Eclipse IDE by the possibility of debugging. Just add jUnit to the project library. I used the current version. 
+* To the unit tests I advise using Eclipse IDE by the possibility of debugging. Just add jUnit to the project library. I used the current version. 
 <br>junit-jupiter-api-5.9.2
+<br><br><br>Note: Make sure you have the [Java JDK](https://www.oracle.com/java/technologies/downloads/#jdk20-windows) installed on your machine and properly configured to run the program.<br>
+
 
 Author
 Felipe Shai
