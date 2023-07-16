@@ -26,13 +26,14 @@ public class Program {
         System.out.println("2. Leave");
 
         Scanner scan = new Scanner(System.in);
-        int option = scan.nextInt();
+        
+        int option = typeInputValidation(scan);
 
         switch (option) {
             case 1:
             	String[] resultValidation = entryAndValidation();
             	
-            	DayOfWeek dayOfWeek = dateTreatment(resultValidation);
+            	DayOfWeek dayOfWeek = FindDayOfWeekForDate(resultValidation);
             	int smallDogsQuantity = Integer.parseInt(resultValidation[1]);
             	int bigDogsQuantity = Integer.parseInt(resultValidation[2]);
             	
@@ -50,9 +51,18 @@ public class Program {
             	
                 break;
             case 2:
+            	System.out.println("---------------------------");
                 System.out.println("Thank you for using Mr. Eduardo's kennel system!");
+            	System.out.println("---------------------------");
+                break;
+            case 0:
+            	System.out.println("---------------------------");
+    			System.out.println("Enter a correct option!");
+            	System.out.println("---------------------------");
+            	menu();
                 break;
             default:
+            	System.out.println("---------------------------");
                 System.out.println("Invalid option! Let`s return to Menu.");
             	System.out.println("---------------------------");
                 menu();
@@ -60,35 +70,99 @@ public class Program {
         }
         scan.close();
     }
+	
+	public static int typeInputValidation(Scanner scan) {
+		try {
+        	int option = scan.nextInt();
+        	return option;
+        }catch (Exception e) {
+			return 0;
+		}
+	}
 
-    public static String[] entryAndValidation() {
-        Scanner scan = new Scanner(System.in);
-        
-        System.out.println("Please enter the entry in the format: <data> <number of small dogs> <amount of large dogs>");
-		System.out.println("Example: 03/08/2018 3 5");
-		
-        String entry = scan.nextLine();
-        
-        String[] entryParts = entry.split(" ");
+	public static String[] entryAndValidation() {
+	    Scanner scan = new Scanner(System.in);
+	    String[] entryParts = null;
+	    
+	    boolean resultDateValidation = false;
+	    boolean resultNumberOfDogs = false;
+	    boolean resultDataValidation = false;
+	    
+	    while (resultDateValidation == false) {
+	    	System.out.println("---------------------------");
+	    	System.out.println("Please enter the entry in the format: <date> <number of small dogs> <number of big dogs>");
+	    	System.out.println("Example: 03/08/2018 3 5");
+	    	
+	    	String entry = scan.nextLine();
+	    	
+	    	entryParts = entry.split(" ");
+	    	
+		    resultDateValidation = IsThreeTypesOfData(entryParts);
+	    }
+	    
+	    	resultNumberOfDogs = IsNumberOfDogsAInteger(entryParts);
+	    	
+	    	resultDataValidation = dateValidation(entryParts);
 
+	    	if(resultNumberOfDogs == false || resultDataValidation == false) {
+	    		entryParts = entryAndValidation();
+	    	}
+	    scan.close();
+	    return entryParts;
+	}
+    
+    public static Boolean IsThreeTypesOfData(String[] entryParts){
         if (entryParts.length != 3) {
-        	entryParts = entryAndValidation();
+        	System.out.println("---------------------------");
+        	System.out.println("Inappropriate Data Entry Format");
+        	return false;
         }
-        scan.close();
-        return entryParts;
+        return true;
     }
     
-    public static DayOfWeek dateTreatment(String[] dateEntry) {
+    public static boolean IsNumberOfDogsAInteger(String[] entryParts) {
+        try {
+        	int smallDogsValidation = Integer.parseInt(entryParts[1]);
+        	int bigDogsValidation = Integer.parseInt(entryParts[2]);
+        	System.out.println("---------------------------");
+        	System.out.println("Data Entry\n");
+        	System.out.println("Number of Small Dogs: " + smallDogsValidation + "---OK" +";\n"  +
+        			"Number of Big Dogs: " + bigDogsValidation + "---OK" +";");
+        	return true;
+        } catch (NumberFormatException e) {
+        	System.out.println("---------------------------");
+        	System.out.println("Data Entry\n");
+            System.out.println("The values for the number of dogs should be Integer numbers.");
+            return false;
+        }
+    }
+
+    public static LocalDate dateFormatter(String[] dateEntry) {
     	String dateEntryTreated = dateEntry[0];
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate date = LocalDate.parse(dateEntryTreated, formatter);
-        DayOfWeek dayOfWeek = date.getDayOfWeek();
-        return dayOfWeek;
+        return date;
     }
     
-    public static void currentData(DayOfWeek dayOfWeek, double smallDogsQuantity, double bigDogsQuantity) {
+    public static boolean dateValidation(String[] dateEntry) {
+        try {
+        	LocalDate date = dateFormatter(dateEntry);
+        	System.out.println("Date formatted: " + date + "---OK");
+        	return true;
+        }catch (Exception e) {
+        	System.out.println("Wrong date format.");
+        	return false;
+		}
+    }
+   
+    public static DayOfWeek FindDayOfWeekForDate(String[] dateEntry) {
+    	DayOfWeek dayOfWeek = dateFormatter(dateEntry).getDayOfWeek();
+        return dayOfWeek;
+    }  
+    
+    public static void currentData(DayOfWeek dayOfWeek, int smallDogsQuantity, int bigDogsQuantity) {
     	System.out.println("---------------------------");
-    	System.out.println("Current data.\n\nDay of Week: " + dayOfWeek + "\nSmall Dog(s) Quantity: " + smallDogsQuantity + "\nBig Dog(s) Quantity: " + bigDogsQuantity);
+    	System.out.println("Data Processed.\n\nDay of Week: " + dayOfWeek + "\nSmall Dog(s) Quantity: " + smallDogsQuantity + "\nBig Dog(s) Quantity: " + bigDogsQuantity);
     	System.out.println("---------------------------");
     }
     
