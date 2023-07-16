@@ -1,23 +1,26 @@
 # Petshop Finder
-## Premissas assumidas
-* O usuário fornecerá a entrada no formato correto: data quantidade-de-cães-pequenos quantidade-de-cães-grandes, por exemplo, 03/08/2018 3 5.
-* Os preços e distâncias mencionados no enunciado do problema são precisos e não são alterados.
-* O sistema considera apenas os preços e distâncias dos três petshops especificados: Meu Canino Feliz, Vai Rex e ChowChawgas. 
-## Decisões de projeto
-* O sistema foi implementado em linguagem Java, utilizando o paradigma de programação orientada a objetos.
-* A estrutura do projeto foi dividida em classes separadas para cada petshop e a lógica principal do programa.
-* A biblioteca java.time foi utilizada para manipular datas e dias da semana.
-* A validação de entrada é mínima e pressupõe que o usuário fornecerá uma entrada válida no formato especificado.
-## Instruções para executar o sistema
-* Clone o repositório para sua máquina local.
-* Abra um prompt de comando ou terminal e navegue até o diretório do projeto.
-* Compile os arquivos-fonte usando o seguinte comando:
+## Assumed premises
+* The user will provide input in the correct format: date number-of-small-dogs number-of-large-dogs, for example, 08/03/2018 3 5.
+* The prices and distances mentioned in the problem statement are accurate and not altered.
+* The system only considers the prices and distances of the three specified pet shops: Meu Canino Feliz, Vai Rex, and ChowChawgas.
+## Design decisions
+* The system was implemented in Java language, using the object-oriented programming paradigm.
+* The project structure was divided into separate classes for each pet shop and the main program logic.
+* The java.time library was used to manipulate dates and weekdays.
+* Input validation is minimal and assumes that the user will provide valid input in the specified format.
+## Instructions to run the system
+* Clone the repository to your local machine.
+* Open a command prompt or terminal and navigate to the project directory.
+* Compile the source files using the following command:
 javac application/Program.java
-* Execute o sistema usando o seguinte comando:
+* Run the system using the following command:
 java application.Program
-* Siga as instruções na tela para inserir a entrada necessária, como a data, a quantidade de cães pequenos e a quantidade de cães grandes.
-* O sistema exibirá o nome do melhor petshop e o preço total dos banhos.
-<br><br>Observação: Certifique-se de ter o JDK do Java instalado em sua máquina e configurado corretamente para executar o programa.<br>
+* Follow the on-screen instructions to input the required information, such as the date, number of small dogs, and number of large dogs.
+* The system will display the name of the best pet shop and the total price of the baths.
+* To the unit tests I advise using Eclipse IDE by the possibility of debugging. Just add jUnit to the project library. I used the current version. 
+<br>junit-jupiter-api-5.9.2
+<br><br><br>Note: Make sure you have the [Java JDK](https://www.oracle.com/java/technologies/downloads/#jdk20-windows) installed on your machine and properly configured to run the program.<br>
 
-Autor
+
+Author
 Felipe Shai
