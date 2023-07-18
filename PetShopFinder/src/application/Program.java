@@ -4,11 +4,13 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
-
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import entities.petshop.ChowChawgas;
 import entities.petshop.MeuCaninoFeliz;
+import entities.petshop.PetShop;
 import entities.petshop.VaiRex;
-import entities.petshop.PetShopPresenter;
 
 public class Program {
 
@@ -24,8 +26,12 @@ public class Program {
         System.out.println("Please choose an option:");
         System.out.println("1. Find the best petshop");
         System.out.println("2. Leave");
-
+        
         Scanner scan = new Scanner(System.in);
+        
+        MeuCaninoFeliz meuCaninoFeliz = new MeuCaninoFeliz();
+        VaiRex vaiRex = new VaiRex();
+        ChowChawgas chowChawgas = new ChowChawgas();
         
         int option = typeInputValidation(scan);
 
@@ -38,16 +44,16 @@ public class Program {
             	int bigDogsQuantity = Integer.parseInt(resultValidation[2]);
             	
             	
-            	currentData(dayOfWeek, smallDogsQuantity, bigDogsQuantity);
+            	currentDate(dayOfWeek);
 
-            	MeuCaninoFeliz meuCaninoFeliz = new MeuCaninoFeliz();
-            	ChowChawgas chowChawgas = new ChowChawgas();
-            	VaiRex vaiRex = new VaiRex();
-            	PetShopPresenter presenter = new PetShopPresenter();
-            	String[][] valuesPetshop = calculateTotalValuePetShops(meuCaninoFeliz, vaiRex, chowChawgas, dayOfWeek, smallDogsQuantity, bigDogsQuantity);
+            	List<PetShop> petShops = new ArrayList<>();
             	
-            	validadatesTie(valuesPetshop);
-            	presenter.setSuccess(true);
+            	petShops = calculateTotalValuePetShopsList(
+            			meuCaninoFeliz, vaiRex, chowChawgas, dayOfWeek, smallDogsQuantity, bigDogsQuantity);
+            	
+            	PetShop petShopResult = findBestPetShop(petShops);
+            	
+            	System.out.println("The best PetShop is " + petShopResult.getName());
             	
                 break;
             case 2:
@@ -101,7 +107,6 @@ public class Program {
 	    }
 	    
 	    	resultNumberOfDogs = IsNumberOfDogsAInteger(entryParts);
-	    	
 	    	resultDataValidation = dateValidation(entryParts);
 
 	    	if(resultNumberOfDogs == false || resultDataValidation == false) {
@@ -160,101 +165,36 @@ public class Program {
         return dayOfWeek;
     }  
     
-    public static void currentData(DayOfWeek dayOfWeek, int smallDogsQuantity, int bigDogsQuantity) {
+    public static void currentDate(DayOfWeek dayOfWeek) {
     	System.out.println("---------------------------");
-    	System.out.println("Data Processed.\n\nDay of Week: " + dayOfWeek + "\nSmall Dog(s) Quantity: " + smallDogsQuantity + "\nBig Dog(s) Quantity: " + bigDogsQuantity);
+    	System.out.println("Date Processed.\nDay of Week: " + dayOfWeek);
     	System.out.println("---------------------------");
     }
-    
-    public static String[][] calculateTotalValuePetShops(MeuCaninoFeliz meuCaninoFeliz, VaiRex vaiRex, ChowChawgas chowChawgas, DayOfWeek dayOfWeek, int smallDogsQuantity, int bigDogsQuantity) {
+        
+    public static List<PetShop> calculateTotalValuePetShopsList(MeuCaninoFeliz meuCaninoFeliz, VaiRex vaiRex, ChowChawgas chowChawgas, DayOfWeek dayOfWeek, int smallDogsQuantity, int bigDogsQuantity) {
     	
     	double totalValueMeuCaninoFeliz = meuCaninoFeliz.calculateTotalPrice(dayOfWeek, smallDogsQuantity, bigDogsQuantity);
     	double totalValueVaiRex = vaiRex.calculateTotalPrice(dayOfWeek, smallDogsQuantity, bigDogsQuantity);
     	double totalValueChowChawgas = chowChawgas.calculateTotalPrice(dayOfWeek, smallDogsQuantity, bigDogsQuantity);
     	
-    	System.out.println("Total Value: \n");
-    	System.out.println("Meu Canino Feliz: R$" + totalValueMeuCaninoFeliz + ";");
-    	System.out.println("Vai Rex: R$" + totalValueVaiRex + ";");
-    	System.out.println("ChowChawgas: R$" + totalValueChowChawgas + ";");
+    	meuCaninoFeliz.setTotalValue(totalValueMeuCaninoFeliz);
+    	vaiRex.setTotalValue(totalValueVaiRex);
+    	chowChawgas.setTotalValue(totalValueChowChawgas);
     	
-    	String[][] totalValuesPetShops = new String[3][2];
-    	totalValuesPetShops[0][0] = Double.toString(totalValueMeuCaninoFeliz);
-    	totalValuesPetShops[1][0] = Double.toString(totalValueVaiRex);
-    	totalValuesPetShops[2][0] = Double.toString(totalValueChowChawgas);
-    	totalValuesPetShops[0][1] = Double.toString(meuCaninoFeliz.getDistance());
-    	totalValuesPetShops[1][1] = Double.toString(vaiRex.getDistance());
-    	totalValuesPetShops[2][1] = Double.toString(chowChawgas.getDistance());
-    	return totalValuesPetShops;
+    	List<PetShop> allPetShopInformations = new ArrayList<>();
+    	allPetShopInformations.add(meuCaninoFeliz);
+    	allPetShopInformations.add(vaiRex);
+    	allPetShopInformations.add(chowChawgas);
+    	
+    	return allPetShopInformations;
     	
     }
-    
-    public static PetShopPresenter validadatesTie(String[][] totalValuesPetShops) {
+                          
+    public static PetShop findBestPetShop(List<PetShop> petShops) {
+    	List<PetShop> petShopsOrdered = petShops;
     	
-    	double totalValueMeuCaninoFeliz = Double.parseDouble(totalValuesPetShops[0][0]);
-    	double totalValueVaiRex = Double.parseDouble(totalValuesPetShops[1][0]);
-    	double totalValueChowChawgas = Double.parseDouble(totalValuesPetShops[2][0]);
-    	double distanceMeuCaninoFeliz = Double.parseDouble(totalValuesPetShops[0][1]);
-    	double distanceVaiRex = Double.parseDouble(totalValuesPetShops[1][1]);
-    	double distanceChowChawgas = Double.parseDouble(totalValuesPetShops[2][1]);
-    	PetShopPresenter presenter = new PetShopPresenter();
+    	petShopsOrdered.sort(Comparator.comparing(PetShop::getTotalValue).thenComparing(PetShop::getDistance));
 
-    	if (totalValueMeuCaninoFeliz < totalValueVaiRex && totalValueMeuCaninoFeliz < totalValueChowChawgas) {
-    	    System.out.println("---------------------------");
-    	    System.out.println("The shipper place is Meu Canino Feliz: R$" + totalValueMeuCaninoFeliz);
-    	} else if (totalValueVaiRex < totalValueMeuCaninoFeliz && totalValueVaiRex < totalValueChowChawgas) {
-    	    System.out.println("---------------------------");
-    	    System.out.println("The shipper place is Vai Rex: R$" + totalValueVaiRex);
-    	} else if (totalValueChowChawgas < totalValueMeuCaninoFeliz && totalValueChowChawgas < totalValueVaiRex) {
-    	    System.out.println("---------------------------");
-    	    System.out.println("The shipper place is ChowChawgas: R$" + totalValueChowChawgas);
-    	} else if (totalValueMeuCaninoFeliz == totalValueVaiRex && totalValueMeuCaninoFeliz == totalValueChowChawgas) {
-    	    double shortestDistance = Math.min(distanceMeuCaninoFeliz, Math.min(distanceVaiRex, distanceChowChawgas));
-    	    
-    	    if (shortestDistance == distanceMeuCaninoFeliz) {
-    	        System.out.println("---------------------------");
-    	        System.out.println("The nearest place is Meu Canino Feliz: R$" + totalValueMeuCaninoFeliz);
-    	        presenter.setMeuCaninoFeizTieWin(true);
-    	    } else if (shortestDistance == distanceVaiRex) {
-    	        System.out.println("---------------------------");
-    	        System.out.println("The nearest place is Vai Rex: R$" + totalValueVaiRex);
-    	        presenter.setVaiRexTieWin(true);
-    	    } else {
-    	        System.out.println("---------------------------");
-    	        System.out.println("The nearest place is ChowChawgas: R$" + totalValueChowChawgas);
-    	        presenter.setChowChawgasTieWin(true);
-    	    }
-    	} else if (totalValueMeuCaninoFeliz == totalValueVaiRex) {
-    	    if (distanceMeuCaninoFeliz < distanceVaiRex) {
-    	        System.out.println("---------------------------");
-    	        System.out.println("The nearest place is Meu Canino Feliz: R$" + totalValueMeuCaninoFeliz);
-    	        presenter.setMeuCaninoFeizTieWin(true);
-    	        return presenter;
-
-    	    } else {
-    	        System.out.println("---------------------------");
-    	        System.out.println("The nearest place is Vai Rex: R$" + totalValueVaiRex);
-    	    }
-    	} else if (totalValueMeuCaninoFeliz == totalValueChowChawgas) {
-    	    if (distanceMeuCaninoFeliz < distanceChowChawgas) {
-    	        System.out.println("---------------------------");
-    	        System.out.println("The nearest place is Meu Canino Feliz: R$" + totalValueMeuCaninoFeliz);
-    	    } else {
-    	        System.out.println("---------------------------");
-    	        System.out.println("The nearest place is ChowChawgas: R$" + totalValueChowChawgas);
-    	    }
-    	} else {
-    	    if (distanceVaiRex < distanceChowChawgas) {
-    	        System.out.println("---------------------------");
-    	        System.out.println("The nearest place is Vai Rex: R$" + totalValueVaiRex);
-    	        presenter.setVaiRexTieWin(true);
-    	        return presenter;
-    	    } else {
-    	        System.out.println("---------------------------");
-    	        System.out.println("The nearest place is ChowChawgas: R$" + totalValueChowChawgas);
-    	        presenter.setChowChawgasTieWin(true);
-    	        return presenter;
-    	    }
-    	}
-		return presenter;
+    	return petShopsOrdered.get(0);
     }
 }

@@ -1,20 +1,19 @@
 package tests;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
+import org.junit.jupiter.api.Assertions;
 import application.Program;
 import entities.petshop.ChowChawgas;
 import entities.petshop.MeuCaninoFeliz;
-import entities.petshop.PetShopPresenter;
+import entities.petshop.PetShop;
 import entities.petshop.VaiRex;
-
 import java.time.DayOfWeek;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PetShopTests {
-
-	PetShopPresenter presenter = new PetShopPresenter();
-
+	
+	//This is the validation stage of the service price calculation results.
 	@Test
     public void testCalculateTotalPriceMeuCaninoFelizWeekday() {
         MeuCaninoFeliz meuCaninoFeliz = new MeuCaninoFeliz();
@@ -56,151 +55,180 @@ public class PetShopTests {
         double totalPrice = chowChawgas.calculateTotalPrice(DayOfWeek.SATURDAY, 1, 2);
         Assertions.assertEquals(120.0, totalPrice);
     }
-
-    @Test
-    public void testTieBreakerByDistanceChowChawgas() {
-        MeuCaninoFeliz meuCaninoFeliz = new MeuCaninoFeliz();
-        VaiRex vaiRex = new VaiRex();
-        ChowChawgas chowChawgas = new ChowChawgas();
-
-        double totalValueMeuCaninoFeliz = 110.0;
-        double totalValueVaiRex = 100.0;
-        double totalValueChowChawgas = 100.0;
-
-        meuCaninoFeliz.setDistance(3.0);
-        vaiRex.setDistance(2.0);
-        chowChawgas.setDistance(1.0);
-
-        String[][] totalValuesPetShops = new String[][]{
-                {String.valueOf(totalValueMeuCaninoFeliz), String.valueOf(meuCaninoFeliz.getDistance())},
-                {String.valueOf(totalValueVaiRex), String.valueOf(vaiRex.getDistance())},
-                {String.valueOf(totalValueChowChawgas), String.valueOf(chowChawgas.getDistance())}
-        };
-
-        presenter = Program.validadatesTie(totalValuesPetShops);
-        Assertions.assertEquals(presenter.isChowChawgasTieWin(), true);
-    }
     
+    //These tests are related to tie-breaking by distance when the total value of services provided by each PetShop is equal.
     @Test
     public void testTieBreakerByDistanceMeuCaninoFeliz() {
-        MeuCaninoFeliz meuCaninoFeliz = new MeuCaninoFeliz();
+
+    	MeuCaninoFeliz meuCaninoFeliz = new MeuCaninoFeliz();
         VaiRex vaiRex = new VaiRex();
         ChowChawgas chowChawgas = new ChowChawgas();
-
-        double totalValueMeuCaninoFeliz = 100.0;
-        double totalValueVaiRex = 100.0;
-        double totalValueChowChawgas = 110.0;
-
+        
+    	List<PetShop> petShops = new ArrayList<>();
+    	
+    	petShops = Program.calculateTotalValuePetShopsList(meuCaninoFeliz, vaiRex, chowChawgas, DayOfWeek.SATURDAY, 0, 0);            	
         meuCaninoFeliz.setDistance(1.0);
         vaiRex.setDistance(2.0);
         chowChawgas.setDistance(3.0);
-
-        String[][] totalValuesPetShops = new String[][]{
-                {String.valueOf(totalValueMeuCaninoFeliz), String.valueOf(meuCaninoFeliz.getDistance())},
-                {String.valueOf(totalValueVaiRex), String.valueOf(vaiRex.getDistance())},
-                {String.valueOf(totalValueChowChawgas), String.valueOf(chowChawgas.getDistance())}
-        };
-
-        presenter = Program.validadatesTie(totalValuesPetShops);
-        Assertions.assertEquals(presenter.isMeuCaninoFeizTieWin(), true);
+        
+    	PetShop petShopResult = Program.findBestPetShop(petShops);
+    	Assertions.assertEquals("Meu Canino Feliz", petShopResult.getName());
     }
     
     @Test
     public void testTieBreakerByDistanceVaiRex() {
-        MeuCaninoFeliz meuCaninoFeliz = new MeuCaninoFeliz();
+
+    	MeuCaninoFeliz meuCaninoFeliz = new MeuCaninoFeliz();
         VaiRex vaiRex = new VaiRex();
         ChowChawgas chowChawgas = new ChowChawgas();
-
-        double totalValueMeuCaninoFeliz = 110.0;
-        double totalValueVaiRex = 100.0;
-        double totalValueChowChawgas = 100.0;
-
-        meuCaninoFeliz.setDistance(3.0);
+        
+    	List<PetShop> petShops = new ArrayList<>();
+    	
+    	petShops = Program.calculateTotalValuePetShopsList(meuCaninoFeliz, vaiRex, chowChawgas, DayOfWeek.SATURDAY, 0, 0);            	
+        meuCaninoFeliz.setDistance(2.0);
         vaiRex.setDistance(1.0);
-        chowChawgas.setDistance(2.0);
-
-        String[][] totalValuesPetShops = new String[][]{
-                {String.valueOf(totalValueMeuCaninoFeliz), String.valueOf(meuCaninoFeliz.getDistance())},
-                {String.valueOf(totalValueVaiRex), String.valueOf(vaiRex.getDistance())},
-                {String.valueOf(totalValueChowChawgas), String.valueOf(chowChawgas.getDistance())}
-        };
-
-        presenter = Program.validadatesTie(totalValuesPetShops);
-        Assertions.assertEquals(presenter.isVaiRexTieWin(), true);
-    }
-
-    @Test
-    public void testTieBreakerByDistancePricesEqualValuesVaiRex() {
-        MeuCaninoFeliz meuCaninoFeliz = new MeuCaninoFeliz();
-        VaiRex vaiRex = new VaiRex();
-        ChowChawgas chowChawgas = new ChowChawgas();
-
-        double totalValueMeuCaninoFeliz = 100.0;
-        double totalValueVaiRex = 100.0;
-        double totalValueChowChawgas = 100.0;
-
-        meuCaninoFeliz.setDistance(3.0);
-        vaiRex.setDistance(1.0);
-        chowChawgas.setDistance(2.0);
-
-        String[][] totalValuesPetShops = new String[][]{
-                {String.valueOf(totalValueMeuCaninoFeliz), String.valueOf(meuCaninoFeliz.getDistance())},
-                {String.valueOf(totalValueVaiRex), String.valueOf(vaiRex.getDistance())},
-                {String.valueOf(totalValueChowChawgas), String.valueOf(chowChawgas.getDistance())}
-        };
-
-        presenter = Program.validadatesTie(totalValuesPetShops);
-        Assertions.assertEquals(presenter.isVaiRexTieWin(), true);
-    }
-
-    @Test
-    public void testTieBreakerByDistancePricesEqualValuesMeuCaninoFeliz() {
-        MeuCaninoFeliz meuCaninoFeliz = new MeuCaninoFeliz();
-        VaiRex vaiRex = new VaiRex();
-        ChowChawgas chowChawgas = new ChowChawgas();
-
-        double totalValueMeuCaninoFeliz = 100.0;
-        double totalValueVaiRex = 100.0;
-        double totalValueChowChawgas = 100.0;
-
-        meuCaninoFeliz.setDistance(1.0);
-        vaiRex.setDistance(3.0);
-        chowChawgas.setDistance(2.0);
-
-        String[][] totalValuesPetShops = new String[][]{
-                {String.valueOf(totalValueMeuCaninoFeliz), String.valueOf(meuCaninoFeliz.getDistance())},
-                {String.valueOf(totalValueVaiRex), String.valueOf(vaiRex.getDistance())},
-                {String.valueOf(totalValueChowChawgas), String.valueOf(chowChawgas.getDistance())}
-        };
-
-        presenter = Program.validadatesTie(totalValuesPetShops);
-        Assertions.assertEquals(presenter.isMeuCaninoFeizTieWin(), true);
+        chowChawgas.setDistance(3.0);
+        
+    	PetShop petShopResult = Program.findBestPetShop(petShops);
+    	Assertions.assertEquals("VaiRex", petShopResult.getName());
     }
     
     @Test
-    public void testTieBreakerByDistancePricesEqualValuesChowChawgas() {
-        MeuCaninoFeliz meuCaninoFeliz = new MeuCaninoFeliz();
+    public void testTieBreakerByDistanceChowChawgas() {
+
+    	MeuCaninoFeliz meuCaninoFeliz = new MeuCaninoFeliz();
         VaiRex vaiRex = new VaiRex();
         ChowChawgas chowChawgas = new ChowChawgas();
-
-        double totalValueMeuCaninoFeliz = 100.0;
-        double totalValueVaiRex = 100.0;
-        double totalValueChowChawgas = 100.0;
-
+        
+    	List<PetShop> petShops = new ArrayList<>();
+    	
+    	petShops = Program.calculateTotalValuePetShopsList(meuCaninoFeliz, vaiRex, chowChawgas, DayOfWeek.SATURDAY, 0, 0);            	
         meuCaninoFeliz.setDistance(3.0);
         vaiRex.setDistance(2.0);
         chowChawgas.setDistance(1.0);
-
-        String[][] totalValuesPetShops = new String[][]{
-                {String.valueOf(totalValueMeuCaninoFeliz), String.valueOf(meuCaninoFeliz.getDistance())},
-                {String.valueOf(totalValueVaiRex), String.valueOf(vaiRex.getDistance())},
-                {String.valueOf(totalValueChowChawgas), String.valueOf(chowChawgas.getDistance())}
-        };
-
-        presenter = Program.validadatesTie(totalValuesPetShops);
-        Assertions.assertEquals(presenter.isChowChawgasTieWin(), true);
+        
+    	PetShop petShopResult = Program.findBestPetShop(petShops);
+    	Assertions.assertEquals("ChowChawgas", petShopResult.getName());
     }
     
+    //These tests validate the result of tie-breaking between 2 out of the 3 pet shops.
+    @Test
+    public void testTiebreakerBetweenMeuCaninoFelizAndVaiRex() {
+
+    	MeuCaninoFeliz meuCaninoFeliz = new MeuCaninoFeliz();
+        VaiRex vaiRex = new VaiRex();
+        ChowChawgas chowChawgas = new ChowChawgas();
+        
+    	List<PetShop> petShops = new ArrayList<>();
+    	
+    	petShops = Program.calculateTotalValuePetShopsList(meuCaninoFeliz, vaiRex, chowChawgas, DayOfWeek.SATURDAY, 1, 1);
+    	meuCaninoFeliz.setTotalValue(100);
+    	vaiRex.setTotalValue(100);
+    	chowChawgas.setTotalValue(150);
+        meuCaninoFeliz.setDistance(1.0);
+        vaiRex.setDistance(2.0);
+        
+    	PetShop petShopResult = Program.findBestPetShop(petShops);
+    	Assertions.assertEquals("Meu Canino Feliz", petShopResult.getName());
+    }
     
+    @Test
+    public void testTiebreakerBetweenMeuCaninoFelizAndChowChawgas() {
+
+    	MeuCaninoFeliz meuCaninoFeliz = new MeuCaninoFeliz();
+        VaiRex vaiRex = new VaiRex();
+        ChowChawgas chowChawgas = new ChowChawgas();
+        
+    	List<PetShop> petShops = new ArrayList<>();
+    	
+    	petShops = Program.calculateTotalValuePetShopsList(meuCaninoFeliz, vaiRex, chowChawgas, DayOfWeek.SATURDAY, 1, 1);
+    	meuCaninoFeliz.setTotalValue(100);
+    	vaiRex.setTotalValue(150);
+    	chowChawgas.setTotalValue(100);
+        meuCaninoFeliz.setDistance(1.0);
+        chowChawgas.setDistance(3.0);
+        
+    	PetShop petShopResult = Program.findBestPetShop(petShops);
+    	Assertions.assertEquals("Meu Canino Feliz", petShopResult.getName());
+    }
     
+    @Test
+    public void testTiebreakerBetweenVaiRexFelizAndChowChawgas() {
+
+    	MeuCaninoFeliz meuCaninoFeliz = new MeuCaninoFeliz();
+        VaiRex vaiRex = new VaiRex();
+        ChowChawgas chowChawgas = new ChowChawgas();
+        
+    	List<PetShop> petShops = new ArrayList<>();
+    	
+    	petShops = Program.calculateTotalValuePetShopsList(meuCaninoFeliz, vaiRex, chowChawgas, DayOfWeek.SATURDAY, 1, 1);
+    	meuCaninoFeliz.setTotalValue(150);
+    	vaiRex.setTotalValue(100);
+    	chowChawgas.setTotalValue(100);
+        vaiRex.setDistance(1.0);
+        chowChawgas.setDistance(2.0);
+        
+    	PetShop petShopResult = Program.findBestPetShop(petShops);
+    	Assertions.assertEquals("VaiRex", petShopResult.getName());
+    }
+    
+    @Test
+    public void testTiebreakerBetweenVaiRexFelizAndMeuCaninoFeliz() {
+
+    	MeuCaninoFeliz meuCaninoFeliz = new MeuCaninoFeliz();
+        VaiRex vaiRex = new VaiRex();
+        ChowChawgas chowChawgas = new ChowChawgas();
+        
+    	List<PetShop> petShops = new ArrayList<>();
+    	
+    	petShops = Program.calculateTotalValuePetShopsList(meuCaninoFeliz, vaiRex, chowChawgas, DayOfWeek.SATURDAY, 1, 1);
+    	meuCaninoFeliz.setTotalValue(100);
+    	vaiRex.setTotalValue(100);
+    	chowChawgas.setTotalValue(150);
+        vaiRex.setDistance(1.0);
+        meuCaninoFeliz.setDistance(2.0);
+        
+    	PetShop petShopResult = Program.findBestPetShop(petShops);
+    	Assertions.assertEquals("VaiRex", petShopResult.getName());
+    }
+    
+    @Test
+    public void testTiebreakerBetweenChowChawgasAndMeuCaninoFeliz() {
+
+    	MeuCaninoFeliz meuCaninoFeliz = new MeuCaninoFeliz();
+        VaiRex vaiRex = new VaiRex();
+        ChowChawgas chowChawgas = new ChowChawgas();
+        
+    	List<PetShop> petShops = new ArrayList<>();
+    	
+    	petShops = Program.calculateTotalValuePetShopsList(meuCaninoFeliz, vaiRex, chowChawgas, DayOfWeek.SATURDAY, 1, 1);
+    	meuCaninoFeliz.setTotalValue(100);
+    	vaiRex.setTotalValue(150);
+    	chowChawgas.setTotalValue(100);
+        chowChawgas.setDistance(1.0);
+        meuCaninoFeliz.setDistance(2.0);
+        
+    	PetShop petShopResult = Program.findBestPetShop(petShops);
+    	Assertions.assertEquals("ChowChawgas", petShopResult.getName());
+    }
+    
+    @Test
+    public void testTiebreakerBetweenChowChawgasAndVaiRex() {
+
+    	MeuCaninoFeliz meuCaninoFeliz = new MeuCaninoFeliz();
+        VaiRex vaiRex = new VaiRex();
+        ChowChawgas chowChawgas = new ChowChawgas();
+        
+    	List<PetShop> petShops = new ArrayList<>();
+    	
+    	petShops = Program.calculateTotalValuePetShopsList(meuCaninoFeliz, vaiRex, chowChawgas, DayOfWeek.SATURDAY, 1, 1);
+    	meuCaninoFeliz.setTotalValue(150);
+    	vaiRex.setTotalValue(100);
+    	chowChawgas.setTotalValue(100);
+        vaiRex.setDistance(2.0);
+        chowChawgas.setDistance(1.0);
+        
+    	PetShop petShopResult = Program.findBestPetShop(petShops);
+    	Assertions.assertEquals("ChowChawgas", petShopResult.getName());
+    }
 }

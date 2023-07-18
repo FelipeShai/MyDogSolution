@@ -2,7 +2,7 @@ package entities.petshop;
 
 public class MeuCaninoFeliz extends PetShop {	
 	
-	static String _nome = "Meu Canino Feliz";
+	static String _name = "Meu Canino Feliz";
 	static double _distance = 2;
 	static double _smallDogPriceWeekday = 20;
 	static double _smallDogPriceWeekend = _smallDogPriceWeekday + _smallDogPriceWeekday * 0.2;
@@ -12,7 +12,7 @@ public class MeuCaninoFeliz extends PetShop {
 	public MeuCaninoFeliz() 
 	{
 		super(
-				_nome,
+				_name,
 				_distance,
 				_smallDogPriceWeekday,
 				_smallDogPriceWeekend,

@@ -4,16 +4,18 @@ import java.time.DayOfWeek;
 
 public class PetShop implements IPetShop {
 	
-	private String nome;
+	private String name;
 	private double distance;
 	private double smallDogPriceWeekday;
 	private double smallDogPriceWeekend;
 	private double bigDogPriceWeekday;
 	private double bigDogPriceWeekend;
+	private double totalValue;
+
 	
-	public PetShop(String nome, double distance, double smallDogPriceWeekday, double smallDogPriceWeekend, double bigDogPriceWeekday,
+	public PetShop(String name, double distance, double smallDogPriceWeekday, double smallDogPriceWeekend, double bigDogPriceWeekday,
 			double bigDogPriceWeekend) {
-		this.nome = nome;
+		this.name = name;
 		this.distance = distance;
 		this.smallDogPriceWeekday = smallDogPriceWeekday;
 		this.smallDogPriceWeekend = smallDogPriceWeekend;
@@ -31,12 +33,12 @@ public class PetShop implements IPetShop {
 		}
 	}
 
-	public String getNome() {
-		return nome;
+	public String getName() {
+		return name;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public double getDistance() {
@@ -77,6 +79,14 @@ public class PetShop implements IPetShop {
 
 	public void setBigDogPriceWeekend(double bigDogPriceWeekend) {
 		this.bigDogPriceWeekend = bigDogPriceWeekend;
+	}
+	
+	public double getTotalValue() {
+		return totalValue;
+	}
+
+	public void setTotalValue(double totalValue) {
+		this.totalValue = totalValue;
 	}
 	
 	
